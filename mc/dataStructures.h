@@ -10,6 +10,13 @@ typedef struct Node {
     int index;
 } node_t;
 
+typedef struct Message{
+
+    uint8_t m[16];
+
+} message_t;
+
+
 union t_convert
 { uint64_t bigvar;
     uint8_t  charvar[8]; }
@@ -65,12 +72,12 @@ int add_bits_to_tree(node_t *root, uint8_t value[], int size, int identifier)
             b = nr & 0b10000000;
             b = b>>7;
             nr = nr<<1;
-            printf("%d",b);
+            // printf("%d",b);
             if(b == 1)
             {
                 if(root->one == NULL)
                 {
-                    node_t *new_node = (node_t *)malloc(sizeof (node_t*));
+                    node_t *new_node = (node_t *)malloc(sizeof (node_t));
                     new_node->one = NULL;
                     new_node->zero = NULL;
                     new_node->parent = root;
@@ -89,12 +96,12 @@ int add_bits_to_tree(node_t *root, uint8_t value[], int size, int identifier)
             {
                 if(root->zero == NULL)
                 {
-                    node_t *new_node = (node_t *)malloc(sizeof (node_t*));
+                    node_t *new_node = (node_t *)malloc(sizeof (node_t));
                     new_node->one = NULL;
                     new_node->zero = NULL;
                     new_node->parent = root;
-                    root->one = new_node;
-                    root = root->one;
+                    root->zero = new_node;
+                    root = root->zero;
                     last = root;
                     new_entry = 1;
 
@@ -111,7 +118,7 @@ int add_bits_to_tree(node_t *root, uint8_t value[], int size, int identifier)
         }
 
     }
-    printf("\n");
+    // printf("\n");
     if(new_entry == 1)
     {
         last->index = identifier;
