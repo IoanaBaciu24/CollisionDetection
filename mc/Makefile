@@ -4,7 +4,7 @@ CC = gcc
 EXEC = 	project.run	\
 
 
-CFLAGS =   -g  -O0
+CFLAGS =   -g  -O3
 HEADER_FILES = $(wildcard *.h)
 
 

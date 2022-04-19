@@ -5,8 +5,8 @@ typedef struct Node {
 
     struct Node *zero;
     struct Node *one;
-    struct Node *sample;
-    struct Node *parent;
+//    struct Node *sample;
+//    struct Node *parent;
     int index;
 } node_t;
 
@@ -80,7 +80,7 @@ int add_bits_to_tree(node_t *root, uint8_t value[], int size, int identifier)
                     node_t *new_node = (node_t *)malloc(sizeof (node_t));
                     new_node->one = NULL;
                     new_node->zero = NULL;
-                    new_node->parent = root;
+//                    new_node->parent = root;
                     root->one = new_node;
                     root = root->one;
                     last = root;
@@ -99,7 +99,7 @@ int add_bits_to_tree(node_t *root, uint8_t value[], int size, int identifier)
                     node_t *new_node = (node_t *)malloc(sizeof (node_t));
                     new_node->one = NULL;
                     new_node->zero = NULL;
-                    new_node->parent = root;
+//                    new_node->parent = root;
                     root->zero = new_node;
                     root = root->zero;
                     last = root;

@@ -1,5 +1,5 @@
 #include "mc48.h"
-
+#include <stdio.h>
 #define HALF_BLOCK_SIZE 24
 #define MASK 0xFFFFFFULL
 #define RN2 48
@@ -171,12 +171,16 @@ void ht48(const uint8_t *m, uint64_t blen, uint8_t h[6])
     {
         tcz48_dm(m + s, h);
     }
-
+//    printf("in hash\n");
+//    for(int i=0;i<6;i++)
+//        printf("%hhu ", h[i]);
+//    printf("\n");
     /// padding ///
 
     // pad with zeros then blen on 64 bits
     if (bm == 0)
     {
+
         for (int i = 0; i < 8; i++)
         {
             mp[i]     = 0;
