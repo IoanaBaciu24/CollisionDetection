@@ -22,7 +22,7 @@ void find_col(uint8_t h[6], uint8_t m1[16], uint8_t m2[16])
     root->one = NULL;
     root->index = -1;
 
-    int n = (int) pow((double) 2,25);
+    int n = (long) pow((double) 2,25);
 
     message_t *arr = (message_t *)malloc(sizeof(message_t)*n);
     uint64_t rnd[2];
@@ -60,6 +60,7 @@ void find_col(uint8_t h[6], uint8_t m1[16], uint8_t m2[16])
     }
         // if we get here, the birthday paradox betrayed us and we didn't find a collision yet
         // double the array that keeps the messages
+        printf("resizing\n");
         index = n;
         n*=2;
         arr  = (message_t *) realloc(arr, n);
