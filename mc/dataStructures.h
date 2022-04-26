@@ -5,10 +5,11 @@ typedef struct Node {
 
     struct Node *zero;
     struct Node *one;
-//    struct Node *sample;
-//    struct Node *parent;
     int index;
 } node_t;
+
+
+
 
 typedef struct Message{
 
@@ -16,6 +17,11 @@ typedef struct Message{
 
 } message_t;
 
+typedef struct LLNode{
+
+    struct LLNode *next;
+    message_t *arr;
+}llnode_t;
 
 union t_convert
 { uint64_t bigvar;

@@ -13,7 +13,7 @@
 
 
 
-void find_col(uint8_t h[6], uint8_t m1[16], uint8_t m2[16])
+void find_col_old(uint8_t h[6], uint8_t m1[16], uint8_t m2[16])
 {
 
     node_t *root = (node_t*)malloc(sizeof(node_t));
@@ -71,6 +71,111 @@ void find_col(uint8_t h[6], uint8_t m1[16], uint8_t m2[16])
 
 }
 
+void find_message(llnode_t *head, int index, uint8_t m[16], uint8_t h[6], uint8_t h_comp[6])
+{
+    llnode_t *current = head;
+    uint8_t haux[6];
+    while (current!=NULL)
+    {
+        for(int j=0;j<6;j++)
+            haux[j] = h[j];
+        tcz48_dm(current->arr[index].m,  &haux);
+
+        int idem = 1;
+        for(int i=0;i<6;i++)
+            if(haux[i]!=h_comp[i]) idem=0;
+
+        if(idem == 1)
+        {
+            for(int j=0;j<16;j++){
+                m[j] = current->arr[index].m[j];
+            }
+            return;
+        }
+
+        current = current->next;
+    }
+}
+
+
+void find_col(uint8_t h[6], uint8_t m1[16], uint8_t m2[16])
+{
+
+    node_t *root = (node_t*)malloc(sizeof(node_t));
+
+    root->zero = NULL;
+    root->one = NULL;
+    root->index = -1;
+
+    int n = (long) pow((double) 2, 25);
+
+    message_t *arr = (message_t *)malloc(sizeof(message_t)*n);
+    llnode_t *head = (llnode_t *) malloc(sizeof(llnode_t));
+    head->arr = arr;
+    head->next = NULL;
+    uint64_t rnd[2];
+    uint8_t message[16];
+    uint8_t haux[6], horig[6];
+    int out, index = 0;
+    while (1){
+        for(int i=index;i<n;i++)
+        {
+            rnd[0] = xoshiro256starstar_random();
+            rnd[1] = xoshiro256starstar_random();
+            from64_to8(rnd, &message);
+
+            for(int j=0;j<6;j++)
+                haux[j] = h[j];
+
+            tcz48_dm(message,  &haux);
+            for(int j=0;j<16;j++)
+                arr[i].m[j] = message[j];
+
+            out = add_bits_to_tree(root, haux, 6, i);
+            if(out != -1)
+            {
+//                for(int j=0;j<16;j++){
+//                    m1[j] = arr[out].m[j];
+//                }
+
+                for(int j=0;j<6;j++)
+                    horig[j] = h[j];
+                find_message(head, out, m1, horig, haux );
+
+                for(int j=0;j<16;j++){
+                    m2[j] = message[j];
+                }
+//                free(arr);
+                while (head!=NULL)
+                {
+                    free(head->arr);
+                    llnode_t *cur = head;
+                    head = head->next;
+                    free(cur);
+                }
+                return;
+            }
+
+        }
+        // if we get here, the birthday paradox betrayed us and we didn't find a collision yet
+        // add another node in the list, reset index, woohoo
+        printf("resizing\n");
+        index = 0;
+
+        llnode_t *next = (llnode_t *) malloc(sizeof(llnode_t));
+        arr = (message_t *)malloc(sizeof(message_t)*n);
+        next->arr = arr;
+        llnode_t *current = head;
+        while (current->next!=NULL)
+            current = current->next;
+
+        current->next = next;
+
+
+    }
+
+
+}
 
 
 void attack(int d)
