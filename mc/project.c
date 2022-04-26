@@ -151,7 +151,10 @@ int main()
 
 
 
+    attack(1);
     attack(2);
+    attack(3);
+    attack(4);
 
     return 0;
 }
